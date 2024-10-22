@@ -2,7 +2,10 @@
 
 return [
     'paths' => ['api/*'],
-    'allowed_origins' => ['http://localhost:3000'],
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['*'],  // 全てのHTTPメソッドを許可
+    'allowed_origins' => ['*'],  // 全てのオリジンを許可
     'allowed_headers' => ['*'],
+    'exposed_headers' => [],
+    'max_age' => 0,
+    'supports_credentials' => false,
 ];
