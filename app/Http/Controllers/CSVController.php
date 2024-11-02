@@ -22,8 +22,22 @@ class CSVController extends Controller
         $path = $file->getRealPath();
 
         try {
+            //csvファイルの文字コードを取得し、その文字コード別にして、ifで場合わけ　例えば、UTF-8 shift-JS
+
             $content = file_get_contents($path); // ファイルの内容を取得
-            $content = mb_convert_encoding($content, 'UTF-8', 'SJIS-win'); // Shift-JISを指定
+
+            // 文字エンコードを自動判定
+            $encoding = mb_detect_encoding($content, ['UTF-8', 'SJIS-win', 'EUC-JP', 'ISO-8859-1', 'ASCII']);
+
+            // 判定結果を表示 ↓JSONに反映されるからechoされないようにする
+            // echo "Encoding: " . $encoding;
+
+            if($encoding === "SJIS-win"){
+                // echo "SJIS=winです";
+                // 判定結果を表示 ↓JSONに反映されるからechoされないようにする
+                $content = mb_convert_encoding($content, 'UTF-8', 'SJIS-win');
+            }
+            // $content = mb_convert_encoding($content, 'UTF-8', 'SJIS-win'); // Shift-JISを指定
             $stream = fopen('php://temp', 'r+');
             fwrite($stream, $content);
             rewind($stream);
@@ -41,7 +55,7 @@ class CSVController extends Controller
                 $data[] = $record; // 各レコードを配列に追加
             }
     
-            return response()->json(['message' => 'CSV uploaded and processed successfully!', 'data' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['message' => "CSV uploaded and processed successfully!文字コードは、$encoding", 'data' => $data], 200, [], JSON_UNESCAPED_UNICODE);
 
         } catch (\Exception $e) {
             // エラーが発生した場合
