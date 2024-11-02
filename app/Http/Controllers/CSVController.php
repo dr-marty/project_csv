@@ -55,7 +55,7 @@ class CSVController extends Controller
                 $data[] = $record; // 各レコードを配列に追加
             }
     
-            return response()->json(['message' => "CSV uploaded and processed successfully!文字コードは、$encoding", 'data' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['message' => "CSVアップロードに成功しました。文字コードは、$encoding", 'data' => $data], 200, [], JSON_UNESCAPED_UNICODE);
 
         } catch (\Exception $e) {
             // エラーが発生した場合
